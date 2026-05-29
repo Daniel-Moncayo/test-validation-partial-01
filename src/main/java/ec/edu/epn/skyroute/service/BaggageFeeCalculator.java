@@ -33,8 +33,22 @@ public class BaggageFeeCalculator {
      * @return costo total en dólares
      * @throws IllegalArgumentException si los parámetros no cumplen las restricciones
      */
-    public double calculateFee(double weight, int bagCount, Long passengerId) {
-        // TODO: Implementar lógica de negocio y validación de excepciones
-        return 0.0;
+    public double calcularFee(double weight, int bagCount, Long passengerId) {
+        if (weight <= 0 || bagCount < 1 || passengerId == null) {
+            throw new IllegalArgumentException("Datos inválidos");
+        }
+
+        double perBagFee = 30.0;
+        if (weight > 23) {
+            perBagFee += 50.0;
+        }
+
+        double total = perBagFee * bagCount;
+
+        if (passengerService.isVip(passengerId) && weight <= 23) {
+            total -= 30.0;
+        }
+
+        return total;
     }
 }
